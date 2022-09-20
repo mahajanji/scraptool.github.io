@@ -1,0 +1,157 @@
+  {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Update Quality</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Update Quality</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Update Quality</h3>
+                <div class="card-tools">
+                    <a href="/qualitys/" class="btn btn-sm btn-primary"><i class="fas fa-long-arrow-alt-left" aria-hidden="true"></i>  Go Back </a>
+                </div>
+        </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                         <form id="updatequality-form">
+                            {% csrf_token %}
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="supplier" class=""> Supplier </label>
+                                    <select type="text" name="supplier" id="supplier" onchange="Supplierid(this)" class="form-control" required>
+                                        <option value=""> Select Supplier </option>
+                                        {% for i in supp %}
+                                        <option value="{{i.id}}" {% if qua.supplier.id == i.id %}selected{% endif %}> {{i.name}} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="Yard" class=""> Yard</label>
+                                    <select type="text" name="Yard" id="Yardid" class="form-control" required>
+                                    
+                                    </select>
+                                </div>
+                                
+
+                                <div class="form-group col-md-4">
+                                    <label for="grade" class="">Grade</label>
+                                    <select type="text" name="grade" id="grade" onchange="Gradeid(this)" class="form-control" required>
+                                        <option value="{{qua.grade.id}}"> {{qua.grade.name}} </option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group col-md-4">
+                                    <label for="duty" class="">Duty</label>
+                                    <input type="text" name="duty" id="duty" value="{{qua.duty}}" class="form-control" required>
+                                </div>
+                                
+                                
+                                
+                            </div>
+                            <div class="form-row" id="newrowappend">
+                            </div>
+
+                            <button type="button" class="btn btn-primary" onclick="updatequality()">Update</button>
+
+                        </form>
+                        
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper  -->
+
+<script>
+function updatequality(){
+    var formData = $("#updatequality-form").serialize();
+    $.ajax({
+        type: 'POST',
+        url: '/add_quality/?u={{qua.id}}',
+        data: formData,
+        success: function(data) {
+            if(data.status == '1'){
+                toastr.success('Quality Update Success.')
+                document.ready(window.setTimeout(location.href="/qualitys/",5000));
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+            }
+            if(data.status == '2'){
+                toastr.error('Wrong weightage calculate')
+            }
+        }
+    })
+}
+
+function Supplierid(){
+    var qua = {{qua.id}};
+    var x = document.getElementById("supplier").value;
+    c = {'x':x,'qua':qua}
+    $.ajax({
+        type: 'GET',
+        url: '/ajax/fatch_Supplier/',
+        data: c,
+        success: function(data) {
+            $("#Yardid").html(data);
+        }
+    })
+}
+
+
+function Gradeid(){
+    var x = {{qua.id}}
+    // var x = document.getElementById("grade").value;
+    c = {'x':x}
+    $.ajax({
+        type: 'GET',
+        url: '/ajax/fatch_quality_ajax/',
+        data: c,
+        success: function(data) {
+            $("#newrowappend").html(data);
+        }
+    })
+}
+
+const windowOnload = window.onload = () => {
+    Supplierid();
+    Gradeid();
+};
+
+windowOnload();
+
+
+</script>
+
+{% include 'include/footer.html' %}

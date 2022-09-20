@@ -1,0 +1,93 @@
+  {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+  <!-- Content Wrapper. Contains page content -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark"></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+               <li class="breadcrumb-item"><a href="/"></a></li> 
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h5> All Supplier </h5>
+
+                <h5>{{suppliers}} </h5>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="/suppliers/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h5>All Metal </h5>
+
+                <h5>{{metals}} </h5>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="/metals/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+          <div class="small-box bg-warning">
+            <div class="inner">
+               <h5>   All Grade </h5>
+               <h5>{{grades}}</h5>
+             </div>
+            <div class="icon">
+               <i class="ion ion-person-add"></i>
+            </div>
+             <a href="/grades/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+           </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+          <div class="small-box bg-primary">
+            <div class="inner">
+               <h5>   All Quality </h5>
+               <h5>{{qualitys}}</h5>
+             </div>
+            <div class="icon">
+               <i class="ion ion-person-add"></i>
+            </div>
+             <a href="/qualitys/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+           </div>
+          </div>
+          <!-- ./col -->
+        </div>
+       
+  </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+
+   {% include 'include/footer.html' %}
+   

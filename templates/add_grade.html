@@ -1,0 +1,293 @@
+  {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+<!-- Content Wrapper. Contains page content -->
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Create Grade</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">All Grades</h3>
+                <div class="card-tools">
+                    <a href="/grades/" class="btn btn-sm btn-primary"> <i class="fas fa-long-arrow-alt-left" aria-hidden="true"></i> Go Back </a>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <form id="addgrade-form">
+                            {% csrf_token %}
+
+                            <div class="form-row">
+
+                                <div class="form-group col-md-6">
+                                    <label for="name" class="">Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" id="name" class="form-control" required>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="gradegrp" class="">Gradegrp <span class="text-danger">*</span></label>
+                                    <input type="text" name="gradegrp" id="gradegrp" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group col-md-6">
+                                    <label for="details" class="">Details <span class="text-danger">*</span></label>
+                                    <input type="tel" name="details" id="details" class="form-control" required>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="miscellaneous" class="">Miscellaneous</label>
+                                    <input type="text" name="miscellaneous" id="miscellaneous" class="form-control" required>
+                                </div>
+                                
+                            </div>
+                            
+                            <br>
+                                <div class="form-row text-center">
+                                <div class="form-group col-md-12 text-center"><b>Type of Product</b></div>
+                                    <div class="form-group col-md-6">
+                                        <label for="typeo" class="">TypeO <span class="text-danger">*</span></label>
+                                        <select type="text" name="typeo" id="typeo" onclick="Typeop()" class="form-control" required>
+                                                    <option value="" desable> Select </option>
+                                                    <option value="Ingot">Ingot </option>
+                                                    <option value="Scrap">Scrap </option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-6">
+                                        <label for="Recovery" class="">Recovery <span class="text-danger">*</span></label>
+                                        <input type="Recovery" name="Recovery" id="Recovery" class="form-control" required>
+                                    </div>
+                                </div>
+                            <br>
+                            <div class="form-row text-center">
+                                <div class="col-lg-6">
+                                <div class="form-group col-md-12"><button type="button" class="btn btn-primary" onclick="add_metal()">Add Metel</button></div>
+                                    <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="Metal" class="">Metal <span class="text-danger">*</span></label>
+                                                <select type="text" name="Metal[]" id="Metal" class="form-control" required>
+                                                <option value=""> Select Metal </option>
+                                                {% for i in metals %}
+                                                <option value="{{i.id}}"> {{i.name}} </option>
+                                                {% endfor %}
+                                            </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="Cost" class="">Cost <span class="text-danger">*</span></label>
+                                                <input type="Metal_Cost" name="Metal_Cost[]" id="Metal_Cost" class="form-control" required>
+                                            </select>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-12" id="key_feature_input_field_div"></div>
+                                    
+                                </div>
+                            
+                                <div class="col-lg-6">
+                                <div class="form-group col-md-12"><button type="button" class="btn btn-primary" onclick="add_overhead()">Add Overhead</button></div>
+                                    <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="Overhead" class="">Overhead <span class="text-danger">*</span></label>
+                                                <select type="text" name="Overhead[]" id="Overhead" onchange="CostSelect()" class="form-control" required>
+                                                <option value="0"> Select Overhead </option>
+                                                {% for i in costs %}
+                                                <option value="{{i.id}}"> {{i.name}} </option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="Overhead_Cost" class="">Cost <span class="text-danger">*</span></label>
+                                                <input type="Overhead_Cost" name="Overhead_Cost[]" id="Overhead_Cost" class="form-control">
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-12" id="key_add_overhead"></div>
+                                </div>
+                            </div>
+                           
+                                <input type="button" class="btn btn-primary btn-sm" value="Add Grade" onclick="AddGrades()">
+                                <p id="msg" class="pl-5" style="font-size:20px;"></p>
+                            
+                        </form>
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+        
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+ <script>
+function Typeop(){
+    var typeo = document.getElementById('typeo').value;
+    if(typeo == 'Scrap'){
+        document.getElementById("Recovery").value = '100';
+    }else{
+        document.getElementById("Recovery").value = '';
+    }
+}
+function AddGrades(){
+    var formData = $("#addgrade-form").serialize();
+    var name = document.getElementById('name').value;
+    var gradegrp = document.getElementById('gradegrp').value;
+    var details = document.getElementById('details').value;
+    var typeo = document.getElementById('typeo').value;
+    var Recovery = document.getElementById('Recovery').value;
+    var Metal = document.getElementById('Metal').value;
+    var Metal_Cost = document.getElementById('Metal_Cost').value;
+    var Overhead = document.getElementById('Overhead').value;
+    if(name == '' || gradegrp == '' || details == '' || typeo == '' || Recovery == '' || Metal == '' || Metal_Cost == '' || Overhead == ''){
+        toastr.error('All Filed Are Required')
+    }else{
+        $.ajax({
+            type: 'POST',
+            url: '/add_grade/',
+            data: formData,
+            success: function(data) {
+                if(data.status == '1'){
+                    $('#addgrade-form')[0].reset();
+                    toastr.success('Grade Create Success.')
+                    document.ready(window.setTimeout(location.href="/grades/",5000));
+                }
+                if(data.status == '0'){
+                    toastr.error('Something Wrong.')
+                }
+            }
+        })
+    }
+}
+
+var count1 = 1;
+function add_metal(){
+    
+        $('#key_feature_input_field_div').append(
+                                            '<div class="form-row" id="con1'+count1+'">'+
+                                            '<div class="form-group col-md-4">'+
+                                                '<label for="Metal" class="">Metal</label>'+
+                                                '<select type="text" name="Metal[]" id="Metal" class="form-control" required>'+
+                                                '<option value=""> Select Metal </option>'+
+                                                    {% for i in metals %}
+                                                        '<option value="{{i.id}}"> {{i.name}} </option>'+
+                                                    {% endfor %}
+                                                '</select>'+
+                                            '</div>'+
+                                            '<div class="form-group col-md-4">'+
+                                                '<label for="Cost" class="">Cost</label>'+
+                                                '<input type="Metal_Cost" name="Metal_Cost[]" value="0" id="Metal_Cost" class="form-control" required>'+
+                                            '</div>'+
+                                            '<div class="col-sm-4 mt-4">'+
+                                            '<button type="button" class="btn btn-danger" id="btnRemove1'+count1+'" onclick="removeBtn1(1'+count1+')">Remove</button>'+
+                                            '</div>'+
+                                            '</div>'
+                                            );
+        
+        count1++;
+}
+function removeBtn1(id) 
+    {
+        $('#con'+id).remove();
+    }
+function removeBtn2(id) 
+    {
+        $('#conn'+id).remove();
+    }
+
+var count2 = 1;
+function add_overhead(){
+    
+        $('#key_add_overhead').append(
+                                    '<div class="form-row" id="conn2'+count2+'">'+
+                                    '<div class="form-group col-md-4">'+
+                                        '<label for="Overhead" class="">Overhead</label>'+
+                                        '<select type="text" name="Overhead[]" id="Overhead'+count2+'" onchange="overheadSelect('+count2+')" class="form-control" required>'+
+                                        '<option value="0"> Select Overhead </option>'+
+                                            {% for i in costs %}
+                                                '<option value="{{i.id}}"> {{i.name}} </option>'+
+                                            {% endfor %}
+                                        '</select>'+
+                                    '</div>'+
+                                    '<div class="form-group col-md-4">'+
+                                    '<label for="Overhead_Cost" class="">Cost</label>'+
+                                      '<input type="Overhead_Cost" name="Overhead_Cost[]" id="Overhead_Cost1'+count2+'" class="form-control" required>'+
+                                    '</div>'+
+                                    '<div class="col-sm-4 mt-4">'+
+                                    '<button type="button" class="btn btn-danger" id="btnRemove2'+count2+'" onclick="removeBtn2(2'+count2+')">Remove</button>'+
+                                    '</div>'+
+                                    '</div>'
+                                    );
+
+        count2++;
+}
+
+
+
+
+function CostSelect(){
+    var x = document.getElementById("Overhead").value;
+    c = {'x':x}
+    $.ajax({
+        type: 'GET',
+        url: '/ajax/fatch_cost/',
+        data: c,
+        success: function(data) {
+            if(data.status == '1'){
+                document.getElementById("Overhead_Cost").value = data.costrate;
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+                document.getElementById("Overhead_Cost").value = 0;
+            }
+        }
+    })
+   
+}
+
+function overheadSelect(num){
+    var id = document.getElementById("Overhead"+num).value;
+
+    c = {'x':id}
+    $.ajax({
+        type: 'GET',
+        url: '/ajax/fatch_cost/',
+        data: c,
+        success: function(data) {
+            if(data.status == '1'){
+                document.getElementById("Overhead_Cost1"+num).value = data.costrate;
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+                document.getElementById("Overhead_Cost1"+num).value = 0;
+            }
+        }
+    })
+    
+    
+}
+</script>
+
+{% include 'include/footer.html' %} 

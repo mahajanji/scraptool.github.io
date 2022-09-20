@@ -1,0 +1,139 @@
+{% load static %}
+<!-- Main Sidebar Container Default: sidebar-dark-primary -->
+<aside class="main-sidebar sidebar-light-navy elevation-4">  
+  <!-- Brand Logo -->
+  <!--<a href="/admin/dashboard" class="brand-link">-->
+    <!--<div class="image">-->
+    <!--  <img src="{% static 'admin/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image" width="60px">-->
+    <!--</div>-->
+  <!--</a>-->
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="info">
+        <a href="/" class="d-block"> Welcome,  {{user.username}}</a>
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+        <li class="nav-item">
+          <a href="/" class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+              Dashboard
+            </p>
+          </a>
+        </li>
+        
+        <h4>Masters</h4>
+        <li class="nav-item has-treeview">
+          <a href="/suppliers/" class="nav-link">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>
+              Suppliers
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="/metals/" class="nav-link">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>
+              Metals
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="/costs/" class="nav-link">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>
+              Cost
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="/grades/" class="nav-link">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>
+              Grade
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+        </li>
+        <h4>Quality</h4>
+        <li class="nav-item has-treeview">
+          <a href="/qualitys/" class="nav-link">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>
+              Quality
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="/actuals/" class="nav-link">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>
+              Actual
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="/calculations/" class="nav-link">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>
+              Calculations
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+        </li>
+
+        <!--<li class="nav-item has-treeview">-->
+        <!--  <a href="/setting/" class="nav-link">-->
+        <!--    <i class="nav-icon fas fa-folder"></i>-->
+        <!--    <p>-->
+        <!--      Setting-->
+        <!--      <i class="fas fa-angle-left right"></i>-->
+        <!--    </p>-->
+        <!--  </a>-->
+        <!--</li>-->
+        <li class="nav-item has-treeview">
+          <a href="/logout/" class="nav-link">
+            <i class="nav-icon fas fa-sign-out-alt"></i>
+            <p>
+              Logout
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+        </li>
+        
+
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
+
+<!-- Messages And Error Messages Alert Boxes -->
+
+<div class="row">
+  <div class="col-md-5 mx-auto text-center">
+    {% for message in messages %}
+      <div class="alert alert-{{message.tag}} alert-dismissible fade show mce_message_box mt-2" role="alert">
+        {{  message  }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+  </div>
+</div>

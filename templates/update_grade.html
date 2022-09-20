@@ -1,0 +1,370 @@
+  {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+<!-- Content Wrapper. Contains page content -->
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Update Grade</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">All Grades</h3>
+                <div class="card-tools">
+                    <a href="/grades/" class="btn btn-sm btn-primary"> <i class="fas fa-long-arrow-alt-left" aria-hidden="true"></i> Go Back </a>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="updateuser-form">
+                            {% csrf_token %}
+
+                            <div class="form-row">
+
+                                <div class="form-group col-md-6">
+                                    <label for="name" class="">Name</label>
+                                    <input type="text" name="name" id="name" class="form-control" value="{{grades.name}}" required>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="gradegrp" class="">Gradegrp</label>
+                                    <input type="text" name="gradegrp" id="gradegrp" class="form-control" value="{{grades.gradegrp}}" required>
+                                </div>
+                                
+                                <div class="form-group col-md-6">
+                                    <label for="details" class="">Details</label>
+                                    <input type="tel" name="details" id="details" class="form-control" value="{{grades.details}}" required>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="miscellaneous" class="">Miscellaneous</label>
+                                    <input type="text" name="miscellaneous" id="miscellaneous" value="{{grades.misc}}" class="form-control" required>
+                                </div>
+                                
+                            </div>
+                            
+                            <br>
+                                <div class="form-row text-center">
+                                <div class="form-group col-md-12 text-center"><b>Type of Product</b></div>
+                                    <div class="form-group col-md-6">
+                                        <label for="typeo" class="">TypeO</label>
+                                        <select type="text" name="typeo" id="typeo" onclick="Typeop()" class="form-control" required>
+                                                    <option value="" desable> Select </option>
+                                                    <option value="Ingot" {% if grades.typeo == 'Ingot' %} selected {% endif %}>Ingot </option>
+                                                    <option value="Scrap" {% if grades.typeo == 'Scrap' %} selected {% endif %}>Scrap </option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-6">
+                                        <label for="Recovery" class="">Recovery</label>
+                                        <input type="Recovery" name="Recovery" id="Recovery" value="{{grades.recovery}}" class="form-control" required>
+                                    </div>
+                                </div>
+                            <br>
+                            <div class="form-row text-center">
+                                <div class="col-lg-6">
+                                <div class="form-group col-md-12"><button type="button" class="btn btn-primary" onclick="add_metal()">Add Metel</button></div>
+                                    {% for g in grades.Grade_grademetal.all %}
+                                    <div class="form-row">
+                                        <input type="hidden" name="metalid[]" value="{{g.id}}" id="metalid" class="form-control" required>
+                                            <div class="form-group col-md-3">
+                                                <label for="Metal" class="">Metal</label>
+                                                <select type="text" name="Metalupdate[]" id="Metalupdate" class="form-control" required>
+                                                <option value=""> Select Metal </option>
+                                                {% for i in metals %}
+                                                <option value="{{i.id}}" {% if i.id == g.metal.id %} selected {% endif %}> {{i.name}} </option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="Cost" class="">Cost</label>
+                                                <input type="text" name="Metal_Costupdate[]" value="{{g.cost}}" id="Metal_Costupdate" class="form-control" required>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <button type="button" class="btn btn-success mt-4" onclick="updatemetal({{g.id}})">Update</button>
+                                            </div>
+                                            
+                                            <div class="form-group col-md-3">
+                                                <button type="button" class="btn btn-danger mt-4" onclick="deletemetal({{g.id}})">Delete</button>
+                                            </div>
+                                    </div>
+                                    {% endfor %}
+                                    <div class="col-sm-12" id="key_feature_input_field_div"></div>
+                                    <div class="form-row">
+                                            <div class="metalnewrow"></div>
+                                    </div>
+                                </div>
+                            
+                                <div class="col-lg-6">
+                                <div class="form-group col-md-12"><button type="button" class="btn btn-primary" onclick="add_overhead()">Add Overhead</button></div>
+                                    {% for c in grades.Grade_gradeoverhead.all %}
+                                    <div class="form-row">
+                                        <input type="hidden" name="ovheadid[]" value="{{c.id}}" id="ovheadid" class="form-control" required>
+                                            <div class="form-group col-md-3">
+                                                <label for="Overhead" class="">Overhead</label>
+                                                <select type="text" name="Overhead_update[]" id="Overhead_update" onchange="CostSelect()" class="form-control" required>
+                                                <option value="0"> Select Overhead </option>
+                                                {% for i in costs %}
+                                                    <option value="{{i.id}}" {% if c.cost.id == i.id %} selected {% endif %}> {{i.name}} </option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="Overhead_Cost_update" class="">Cost</label>
+                                                <input type="text" name="Overhead_Cost_update[]" id="Overhead_Cost_update" value="{{c.cost_value}}" class="form-control" required>
+                                            </div> 
+                                            <div class="form-group col-md-3">
+                                                <button type="button" class="btn btn-success mt-4" onclick="updateoverhead({{c.id}})">Update</button>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <button type="button" class="btn btn-danger mt-4" onclick="deletecost({{c.id}})">Delete</button>
+                                            </div>
+                                    </div>
+                                    {% endfor %}
+                                    <div class="col-sm-12" id="key_add_overhead"></div>
+                                </div>
+                            </div>
+                           
+                                <button type="button" class="btn btn-primary btn-sm" id="adduserid" onclick="updateuser()">  Update Grade</button>
+                                <p id="msg" class="pl-5" style="font-size:20px;"></p>
+                            
+                        </form>
+                        
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+        
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+ <script>
+ 
+function Typeop(){
+    var typeo = document.getElementById('typeo').value;
+    if(typeo == 'Scrap'){
+        document.getElementById("Recovery").value = '100';
+    }else{
+        document.getElementById("Recovery").value = '';
+    }
+}
+
+function updatemetal(id){
+    var Metalupdate = document.getElementById("Metalupdate").value;
+    var Metal_Costupdate = document.getElementById("Metal_Costupdate").value;
+    $.ajax({
+        type: 'GET',
+        url: '/update_metal_grade/',
+        data: {'id':id,'Metalupdate':Metalupdate, 'Metal_Costupdate':Metal_Costupdate},
+        success: function(data) {
+            if(data.status == '1'){
+                toastr.success('metal Update Success.')
+                document.ready(window.setTimeout(location.href="/grades/",5000));
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+            }
+        }
+    })
+}
+function updateoverhead(id){
+    var Overhead_update = document.getElementById("Overhead_update").value;
+    var Overhead_Cost_update = document.getElementById("Overhead_Cost_update").value;
+    $.ajax({
+        type: 'GET',
+        url: '/update_overhead_grade/',
+        data: {'id':id,'Overhead_update':Overhead_update, 'Overhead_Cost_update':Overhead_Cost_update},
+        success: function(data) {
+            if(data.status == '1'){
+                toastr.success('metal Update Success.')
+                //document.ready(window.setTimeout(location.href="/grades/",5000));
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+            }
+        }
+    })
+}
+function deletemetal(id){
+    $.ajax({
+        type: 'GET',
+        url: '/delete_metal_grade/',
+        data: {'id':id},
+        success: function(data) {
+            if(data.status == '1'){
+                toastr.success('metal Delete Success.')
+                document.ready(window.setTimeout(window.location.reload(),8000));
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+            }
+        }
+    })
+}
+function deletecost(id){
+    $.ajax({
+        type: 'GET',
+        url: '/delete_metal_overhead/',
+        data: {'id':id},
+        success: function(data) {
+            if(data.status == '1'){
+                toastr.success('Grade Update Success.')
+                document.ready(window.setTimeout(window.location.reload(),8000));
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+            }
+        }
+    })
+}
+
+function updateuser(){
+    var formData = $("#updateuser-form").serialize();
+    $.ajax({
+        type: 'POST',
+        url: '/add_grade/?u={{grades.id}}',
+        data: formData,
+        success: function(data) {
+            if(data.status == '1'){
+                toastr.success('Grade Update Success.')
+                document.ready(window.setTimeout(location.href="/grades/",5000));
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+            }
+        }
+    })
+}
+
+
+
+function CostSelect(){
+    var x = document.getElementById("Overhead").value;
+    c = {'x':x}
+    $.ajax({
+        type: 'GET',
+        url: '/ajax/fatch_cost/',
+        data: c,
+        success: function(data) {
+            if(data.status == '1'){
+                document.getElementById("Overhead_Cost").value = data.costrate;
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+                document.getElementById("Overhead_Cost").value = 0;
+            }
+        }
+    })
+}
+//window.onload  = CostSelect;
+
+var count1 = 1;
+function add_metal(){
+    
+        $('#key_feature_input_field_div').append(
+                                            '<div class="form-row" id="con1'+count1+'">'+
+                                            '<div class="form-group col-md-4">'+
+                                                '<label for="Metal" class="">Metal</label>'+
+                                                '<select type="text" name="Metal[]" id="Metal" class="form-control" required>'+
+                                                '<option value=""> Select Metal </option>'+
+                                                    {% for i in metals %}
+                                                        '<option value="{{i.id}}"> {{i.name}} </option>'+
+                                                    {% endfor %}
+                                                '</select>'+
+                                            '</div>'+
+                                            '<div class="form-group col-md-4">'+
+                                                '<label for="Cost" class="">Cost</label>'+
+                                                '<input type="Metal_Cost" name="Metal_Cost[]" id="Metal_Cost" class="form-control" required>'+
+                                            '</div>'+
+                                            '<div class="col-sm-4 mt-4">'+
+                                            '<button type="button" class="btn btn-danger" id="btnRemove1'+count1+'" onclick="removeBtn1(1'+count1+')">Remove</button>'+
+                                            '</div>'+
+                                            '</div>'
+                                            );
+        
+        count1++;
+}
+function removeBtn1(id) 
+    {
+        $('#con'+id).remove();
+    }
+function removeBtn2(id) 
+    {
+        $('#conn'+id).remove();
+    }
+
+var count2 = 1;
+function add_overhead(){
+    
+        $('#key_add_overhead').append(
+                                    '<div class="form-row" id="conn2'+count2+'">'+
+                                    '<div class="form-group col-md-4">'+
+                                        '<label for="Overhead" class="">Overhead</label>'+
+                                        '<select type="text" name="Overhead[]" id="Overhead'+count2+'" onchange="overheadSelect('+count2+')" class="form-control" required>'+
+                                        '<option value=""> Select Overhead </option>'+
+                                            {% for i in costs %}
+                                                '<option value="{{i.id}}"> {{i.name}} </option>'+
+                                            {% endfor %}
+                                        '</select>'+
+                                    '</div>'+
+                                    '<div class="form-group col-md-4">'+
+                                        '<label for="Overhead_Cost" class="">Cost</label>'+
+                                        '<input type="text" name="Overhead_Cost[]" id="Overhead_Cost1'+count2+'" class="form-control" required>'+
+                                    '</div>'+
+                                    '<div class="col-sm-4 mt-4">'+
+                                    '<button type="button" class="btn btn-danger" id="btnRemove2'+count2+'" onclick="removeBtn2(2'+count2+')">Remove</button>'+
+                                    '</div>'+
+                                    '</div>'
+                                    );
+
+        count2++;
+}
+
+function overheadSelect(num){
+    var id = document.getElementById("Overhead"+num).value;
+    c = {'x':id}
+    $.ajax({
+        type: 'GET',
+        url: '/ajax/fatch_cost/',
+        data: c,
+        success: function(data) {
+            if(data.status == '1'){
+                document.getElementById("Overhead_Cost1"+num).value = data.costrate;
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+                document.getElementById("Overhead_Cost1"+num).value = 0;
+            }
+        }
+    })
+    
+    
+}
+
+</script>
+
+{% include 'include/footer.html' %} 

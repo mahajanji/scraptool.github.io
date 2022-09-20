@@ -1,0 +1,221 @@
+{% if sYard %}
+        <option value="" >Select Yard</option>
+        {% for i in sYard %}
+            <option value="{{i.id}}" {% if i.id == qua.yard.id %} selected {% endif %}>{{i.name}} </option>
+        {% endfor %}
+{% endif %}
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+{% if grades %}
+    {% for i in grades %}
+        <div class="form-group col-md-6">
+            <label for="typeoid" class="">Type</label>
+            <input type="text" name="typeo" id="typeo" value="{{i.typeo}}" class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="recovery" class="">Recovery</label>
+            <input type="text" name="recovery" id="recovery" value="{{i.recovery}}" class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <table>
+                  <thead>
+                      <tr>
+                        <th> NAME </th>
+                        <th> RATE/KG </th>
+                        <th> % WEIGHTAGE</th>
+                      </tr>
+                </thead>
+                <tbody>
+              {% for i in i.Grade_grademetal.all %}
+              <tr>
+                <td>{{i.metal.name}}
+                <input type="hidden" name="Metal[]" value="{{i.metal.id}}" style="width:90px"></td>
+                <td><input type="text" name="Metal_Cost[]" value="{{i.cost}}" style="width:90px"></td>
+                <td><input type="text" name="weightage[]" value="0" style="width:90px" id="weightageid[]"></td>
+              </tr>
+              {% endfor %}
+              <tbody>
+            </table>
+        </div>
+        <div class="form-group col-md-6">
+            <table>
+              <tr>
+                <th> NAME </th>
+                <th> RATE </th>
+              </tr>
+              {% for i in i.Grade_gradeoverhead.all %}
+              <tr>
+                <td>{{i.cost.name}}
+                <input type="hidden" name="Overhead[]" value="{{i.cost.id}}" style="width:90px"></td>
+                <td><input type="text" name="cost_value[]" value="{{i.cost_value}}" style="width:90px"></td>
+              </tr>
+              {% endfor %}
+             
+            </table>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if quality %}
+    {% for q in quality %}
+        <div class="form-group col-md-6">
+            <label for="typeoid" class="">Type</label>
+            <input type="text" name="typeo" id="typeo" value="{{q.typeo}}" class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="recovery" class="">Recovery</label>
+            <input type="text" name="recovery" id="recovery" value="{{q.recovery}}" class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <table>
+                  <thead>
+                      <tr>
+                        <th> NAME </th>
+                        <th> RATE/KG </th>
+                        <th> % WEIGHTAGE</th>
+                      </tr>
+                </thead>
+                <tbody>
+              {% for i in q.Quality_Qualitymetal.all %}
+              <tr>
+                <td>{{i.metal.name}}
+                <input type="hidden" name="quaid[]" value="{{i.id}}"></td>
+                <td><input type="text" name="Metal_Costqua[]" value="{{i.cost}}" style="width:90px"></td>
+                <td><input type="text" name="weightagequa[]" value="{{i.weightage}}" style="width:90px"></td>
+              </tr>
+              {% endfor %}
+              <tbody>
+            </table>
+        </div>
+        <div class="form-group col-md-6">
+            <table>
+              <tr>
+                <th> NAME </th>
+                <th> RATE </th>
+              </tr>
+              {% for i in q.Quality_Qualityoverhead.all %}
+              <tr>
+                <td>{{i.cost.name}}
+                <input type="hidden" name="Overheadid[]" value="{{i.id}}" style="width:90px"></td>
+                <td><input type="text" name="cost_valuequa[]" value="{{i.cost_value}}" style="width:90px"></td>
+              </tr>
+              {% endfor %}
+             
+            </table>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if quaactual %}
+    {% for q in quaactual %}
+        <div class="form-group col-md-6">
+            <label for="typeoid" class="">Type</label>
+            <input type="text" name="typeo" id="typeo" value="{{q.typeo}}" class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="recovery" class="">Recovery</label>
+            <input type="text" name="recovery" id="recovery" value="{{q.recovery}}" class="form-control" readonly>
+        </div>
+        <input type="hidden" name="gradeid" id="gradeid" value="{{q.grade.id}}" class="form-control" readonly>
+        <div class="form-group col-md-8">
+            <table>
+                  <thead>
+                      <tr>
+                        <th> NAME </th>
+                        <th> RATE/KG </th>
+                        <th> % WEIGHTAGE</th>
+                        <th> Actual </th>
+                      </tr>
+                </thead>
+                <tbody>
+              {% for i in q.Quality_Qualitymetal.all %}
+              <tr>
+                <td>{{i.metal.name}}
+                <input type="hidden" name="metalid[]" value="{{i.metal.id}}"></td>
+                <td><input type="text" name="Metal_Costactual[]" value="{{i.cost}}" style="width:90px"></td>
+                <td><input type="text" name="weightageactual[]" value="{{i.weightage}}" style="width:90px" readonly></td>
+                <td><input type="text" name="actual_value[]" value="0" style="width:90px"></td>
+              </tr>
+              {% endfor %}
+              <tbody>
+            </table>
+        </div>
+        <div class="form-group col-md-4">
+            <table>
+              <tr>
+                <th> NAME </th>
+                <th> RATE </th>
+              </tr>
+              {% for i in q.Quality_Qualityoverhead.all %}
+              <tr>
+                <td>{{i.cost.name}}
+                <input type="hidden" name="costoverheadid[]" value="{{i.cost.id}}" style="width:90px"></td>
+                <td><input type="text" name="cost_valueactual[]" value="{{i.cost_value}}" style="width:90px" readonly></td>
+              </tr>
+              {% endfor %}
+             
+            </table>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!--- aActualid --->
+{% if Actualid %}
+{% for a in Actualid %}
+        
+        <div class="form-group col-md-8">
+            <table>
+                  <thead>
+                      <tr>
+                        <th> NAME </th>
+                        <th> RATE/KG </th>
+                        <th> % WEIGHTAGE</th>
+                        <th> Actual </th>
+                      </tr>
+                </thead>
+                <tbody>
+              {% for i in a.Actual_Actualmetal.all %}
+              <tr>
+                <td>{{i.metal.name}}
+                <input type="hidden" name="actualmidu[]" value="{{i.id}}"></td>
+                <td><input type="text" name="Metal_Costactualu[]" value="{{i.cost}}" style="width:90px"></td>
+                <td><input type="text" name="weightageactualu[]" value="{{i.weightage}}" style="width:90px" readonly></td>
+                <td><input type="text" name="actual_valueu[]" value="{{i.actual_value}}" style="width:90px"></td>
+              </tr>
+              {% endfor %}
+              <tbody>
+            </table>
+        </div>
+        <div class="form-group col-md-4">
+            <table>
+              <tr>
+                <th> NAME </th>
+                <th> RATE </th>
+              </tr>
+              {% for i in a.Actual_Actualoverhead.all %}
+              <tr>
+                <td>{{i.cost.name}}
+                <input type="hidden" name="actualoverheadidu[]" value="{{i.id}}" style="width:90px"></td>
+                <td><input type="text" name="cost_valueactualu[]" value="{{i.cost_value}}" style="width:90px" readonly></td>
+              </tr>
+              {% endfor %}
+             
+            </table>
+        </div>
+    {% endfor %}
+{% endif %}

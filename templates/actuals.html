@@ -1,0 +1,95 @@
+       {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1> All Actual </h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                            <li class="breadcrumb-item active">All Actual</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">All Actual</h3>
+                    <div class="card-tools">
+                        <a href="/add_actual/" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Create Actual</a>
+                    </div>
+            </div>
+                <div class="card-body">
+
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                                    <th>#No.</th>
+                                                    <th>Supplier Name</th>
+                                                    <th>Yard</th>
+                                                    <th>Grade</th>
+                                                    <th>Duty</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in actuals %}
+                               	<tr>
+					  <td>#{{forloop.counter}}</td>
+					  <td>{{i.supplier}}</td>
+					  <td>{{i.yard}}</td>
+					  <td>{{i.grade.name}}</td>
+					  <td>{{i.duty}}</td>
+					  <td><a class="btn btn-primary" href="/add_actual/?u={{i.id}}">Edit</a></td>
+					  <td><a class="btn btn-danger text-white" onclick="deletectual({{i.id}})">Delete</a></td>
+					  {% endfor %}
+                                </tbody>
+                        </table>
+
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+ <script>
+ function deletectual(id){
+     var result = confirm("Are you sure. you want to delete?");
+     if (result) {
+         $.ajax({
+             type: 'GET',
+             url: '/delete_actual/',
+             data: {'u':id},
+             success: function(data) {
+                if(data.status == '1'){
+                    toastr.success('Delete Quality Success.')
+                    document.ready(window.setTimeout(window.location.reload(),5000));
+                 }
+                 if(data.status == '0'){
+                    toastr.error('Something Wrong.')
+                 }
+             }
+         })
+     }
+ }
+ </script>
+
+    {% include 'include/footer.html' %}

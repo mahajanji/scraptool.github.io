@@ -1,0 +1,92 @@
+{% include 'admin/include/header.html' %}
+{% include 'admin/include/topbar.html' %}
+ {% include 'admin/include/sidebar.html' %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+ <!-- Content Header (Page header) -->
+ <section class="content-header">
+     <div class="container-fluid">
+
+         <div class="row mb-2">
+             <div class="col-sm-6">
+                 <h1> Setting</h1>
+             </div>
+             <div class="col-sm-6">
+                 <ol class="breadcrumb float-sm-right">
+                     <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                     <li class="breadcrumb-item active">Setting</li>
+                 </ol>
+             </div>
+         </div>
+     </div><!-- /.container-fluid -->
+ </section>
+
+ <!-- Main content -->
+ <section class="content">
+
+     <!-- Default box -->
+     <div class="card">
+        
+         <div class="card-body">
+
+             <div class="row">
+                 <div class="col-md-12">
+                 
+                      <form id="update_form">
+                         {% csrf_token %}
+
+                         <div class="form-row">
+
+                             <div class="form-group col-md-4">
+                                 <label for="first_name" class="">First Name</label>
+                                 <input type="text" name="first_name" id="first_name" class="form-control" value="{{users.first_name}}" required>
+                             </div>
+
+                             <div class="form-group col-md-4">
+                                 <label for="last_name" class="">Last Name</label>
+                                 <input type="text" name="last_name" id="last_name" class="form-control" value="{{users.last_name}}" required>
+                             </div>
+                             
+
+                             <div class="form-group col-md-4">
+                                 <label for="email" class="">Email</label>
+                                 <input type="email" name="email" id="email" class="form-control" value="{{users.email}}" required>
+                             </div>
+
+                         </div>
+
+                         <button type="button" class="btn btn-primary" onclick="updateprofile()"> Update Profile </button>
+
+                     </form>
+                   
+                 </div>
+             </div>
+
+         </div>
+         <!-- /.card-body -->
+     </div>
+     <!-- /.card -->
+
+ </section>
+ <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<script>
+    function updateprofile(){
+        var formData = $("#update_form").serialize();
+        $.ajax({
+            type: 'POST',
+            url: '/admin/setting/',
+            data: formData,
+            success: function(data) {
+                if(data.status == '1'){
+                    toastr.success("Update Profile Success")
+                }
+                if(data.status == '0'){
+                    toastr.error("Update Profile Success")
+                }
+            }
+        })
+    }
+</script>
+{% include 'admin/include/footer.html' %}

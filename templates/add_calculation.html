@@ -1,0 +1,251 @@
+  {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Content Wrapper. Contains page content -->
+<style>
+    .hidecol{
+         display: none;
+    }
+</style>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Create Calculation</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Calculation</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Create Calculation</h3>
+                <div class="card-tools">
+                    <a href="/calculations/" class="btn btn-sm btn-primary"><i class="fas fa-long-arrow-alt-left" aria-hidden="true"></i>  Go Back </a>
+                </div>
+        </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+     
+                        <form id="adduser-form">
+                            {% csrf_token %}
+
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="grade" class=""> Grade <span class="text-danger">*</span></label>
+                                    <select type="text" name="actualquality" id="actualquality" class="form-control" required>
+                                        <option value="Quality">Quality </option>
+                                        <option value="Actual"> Actual </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="grade" class=""> Grade <span class="text-danger">*</span></label>
+                                    <select type="text" name="grade" id="grade" onChange="gradeid(this)" class="form-control" required>
+                                        <option value=""> Select Grade </option>
+                                        {% for i in grades %}
+                                        <option value="{{i.id}}"> {{i.name}} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="supplier_rate" class=""> Grade Cost <span class="text-danger">*</span></label>
+                                    <input type="text" name="supplier_rate" id="supplier_rate" oninput="grade_cost()" class="form-control" required>
+                                </div>
+                                 <div class="form-group col-md-3">
+                                    <label for="exchange" class="">Exchange <span class="text-danger">*</span></label>
+                                    {% for exc in gradenewvalue %}
+                                    <input type="text" name="exchange" id="exchange" value="{{exc.name}}" class="form-control" required disabled>
+                                    {% endfor %}
+                                </div>
+                                
+                                <div class="form-group col-md-3">
+                                    <label for="srptir" class="">Supplier Rate Per Ton in Rupees <span class="text-danger">*</span></label>
+                                    <input type="text" name="srptir" id="srptir" class="form-control" required disabled>
+                                </div>
+                                
+                                <div class="form-group col-md-3">
+                                    <label for="supplier_per_kg" class="">Supplier / Kg <span class="text-danger">*</span></label>
+                                    <input type="text" name="supplier_per_kg" id="supplier_per_kg" class="form-control" required disabled>
+                                </div>
+                                
+                            </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <table id="example1" class="table table-bordered table-striped">
+                                          <thead class="table-dark">
+                                                <tr>
+                                                  <th>#</th>
+                                                  <th>Supplier Name</th>
+                                                  <th>Yard</th>
+                                                  <th>Aluminium Cost</th>
+                                                  <th>Al</th>
+                                                  <th>Final Al</th>
+                                                </tr>
+                                          </thead>
+                                          <tbody>
+                                                
+                                          </tbody>
+                                        </table>
+                                    <table id="example1" class="table table-bordered table-striped">
+                                          <thead class="table-dark">
+                                                <tr>
+                                                  <th>#</th>
+                                                  <th>Supplier Name</th>
+                                                  <th>Yard</th>
+                                                  <th>Aluminium Cost</th>
+                                                  <th>Al</th>
+                                                  <th>Final Al</th>
+                                                  <th>Button</th>
+                                                  
+                                                  <th class="hidecol">Recovery</th>
+                                                  <th class="hidecol">Duty</th>
+                                                  <th class="hidecol"> Weightage Aluminium</th>
+                                                  <th class="hidecol">cost w/o alum</th>
+                                                  <th class="hidecol">Overhead Cost</th>
+                                                  <th class="hidecol">total operation</th>
+                                                  <th class="hidecol">Al cost without weightage</th>
+                                                  <th class="hidecol">Duty Cost</th>
+                                                  
+                                                </tr>
+                                          </thead>
+                                          <tbody id="Supplierid">
+                                                
+                                          </tbody>
+                                        </table>
+                                        </div>
+                                </div>
+                                
+                                
+                                <div class="form-row" id="NewRowdata">
+                                </div>
+                                
+                            <div class="form-row hidecol">
+                               
+                            
+                            </div>
+                            
+                            <input type="button" value="Calculate" class="btn btn-primary" id="Calculatefirst" onclick="Supplierrate()" />
+                            <button type="button" id="export_data1" onclick="export_data()" class="btn btn-success btn-sm">Export</button>
+                        </form>
+                        
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper  -->
+
+<script>
+
+function grade_cost(){
+    var svalue = document.getElementById('supplier_rate').value;
+    var exchange = document.getElementById('exchange').value;
+    
+    srptir = svalue * exchange
+    
+    document.getElementById('srptir').value = srptir;
+    supplier_per_kg = srptir/1000;
+    document.getElementById('supplier_per_kg').value = supplier_per_kg;
+}
+
+function Supplierrate(){
+    var supplier_per_kg = document.getElementById('supplier_per_kg').value;
+    if(supplier_per_kg == ''){
+          alert('Please Enter Grade Cost');
+    }else{
+        var a_smpid = [];
+        $.each($("input[name='Supplierrateid']"), function(){
+            a_smpid.push($(this).val());
+        });
+        //a_smpid = $("#example1 > tbody > tr").length);
+        for(let i=1; i < a_smpid; i++){
+            alert(i);
+            var id = i;
+            var recovery = document.getElementById('recovery'+id).value;
+            var weghtagofalum = document.getElementById('weghtagofalum'+id).value;
+            var duty = document.getElementById('duty'+id).value;
+            var overhead1 = document.getElementById('overhead'+id).value;
+            var costwithaoutalum = document.getElementById('costwithaoutalum'+id).value;
+            
+            var duty_cost = supplier_per_kg * duty/100;
+            document.getElementById('duty_cost'+id).value = duty_cost;
+            
+            //total_operation
+            var total_operation = parseFloat(duty_cost) + parseFloat(supplier_per_kg) + parseFloat(overhead1);
+            document.getElementById('total_operation'+id).value = total_operation;
+            Alcostwithoutweightage = total_operation - costwithaoutalum;
+            document.getElementById('Alcostwithoutweightage'+id).value = Alcostwithoutweightage;
+        
+            //al
+            Alcost = Alcostwithoutweightage/(weghtagofalum/100);
+            $('#Alcost'+id).text(Alcost)
+            //document.getElementById('Alcost'+id).value = Alcost;
+            console.log(Alcost);
+            
+            //final al
+            finalalcost = Alcost/(recovery/100);
+            $('#finalalcost'+id).text(finalalcost)
+            //document.getElementById('finalalcost'+id).value = finalalcost;
+        }
+    }
+    
+}
+
+function gradeid(){
+    var actualquality = document.getElementById("actualquality").value;
+    var grade = document.getElementById("grade").value;
+    if(actualquality == ''){
+        alert('Select Quality or Actual');
+    }else{
+        c = {'grade':grade,'actualquality':actualquality}
+        $.ajax({
+            type: 'GET',
+            url: '/ajax/fatch_grade_calculator/',
+            data: c,
+            success: function(data) {
+                $("#Supplierid").html(data);
+            }
+        })
+    }
+}
+
+function export_data(){
+    let data = document.getElementById('example1');
+    var fp=XLSX.utils.table_to_book(data,{sheet:"sheet1"});
+    XLSX.write(fp,{
+       booktype:'xlsx',
+       type:'base64'
+    });
+    XLSX.writeFile(fp, 'data.xlsx');
+}
+
+
+</script>
+
+
+{% include 'include/footer.html' %}

@@ -1,0 +1,111 @@
+       {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1> All Cost </h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                            <li class="breadcrumb-item active">All Cost</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <div class="container">
+            <form method="GET" action="/gradenewvalue/"> 
+                        <label for="po_number" class="">Exchange Rate</label>
+                        {% for i in values %}
+                        <input type="text" name="name" value="{{i.name}}" id="gradenewvalue"> 
+                        {% endfor %} 
+                        <button type="submit" class="btn btn-primary btn-sm">submit</button>
+            </form>
+        </div>
+
+        <!-- Main content -->
+        <section class="content">
+            
+            <!-- Default box -->
+            <div class="card">
+                
+                <div class="card-header">
+                    
+                        <h3 class="card-title">All Cost</h3>
+                        
+                        <div class="card-tools">
+                            <a href="/add_cost/" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Create Cost</a>
+                        </div>
+                   
+                </div>
+                <div class="card-body">
+<div id="msg"></div>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                                    <th>#No.</th>
+                                                    <th> Name</th>
+                                                    <th>Shortform</th>
+                                                    <th>Rate</th>
+                                                    <th>Misc</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                    
+                                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in costs %}
+                               	<tr>
+					  <td>#{{forloop.counter}}</td>
+					  <td>{{i.name}}</td>
+					  <td>{{i.shortform}}</td>
+					  <td>{{i.rate}}</td>
+					  <td>{{i.misc}}</td>
+					  
+					  <td><a class="btn btn-primary btn-sm" href="/add_cost/?u={{i.id}}">Edit</a></td>
+					 <td> <a class="btn btn-danger btn-sm text-white" onclick="deleteuser({{i.id}})">Delete</a></td>
+					  </tr>
+					  {% endfor %}
+                                </tbody>
+                        </table>
+
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <script>
+    function deleteuser(id){
+        var result = confirm("Are you sure. you want to delete?");
+        if (result) {
+            $.ajax({
+                type: 'GET',
+                url: '/delete_cost/',
+                data: {'u':id},
+                success: function(data) {
+                    if(data.status == '1'){
+                        toastr.success('Cost Delete Success.')
+                        document.ready(window.setTimeout(window.location.reload(),5000));
+                    }
+                    if(data.status == '0'){
+                        toastr.error('Something Wrong.')
+                    }
+                }
+            })
+        }
+    }
+
+    </script>
+    {% include 'include/footer.html' %}

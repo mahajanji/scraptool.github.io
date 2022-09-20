@@ -1,0 +1,6 @@
+{% if sYardss %}
+        <option value="" >Select Yard</option>
+        {% for i in sYardss %}
+            <option value="{{i.id}}">{{i.name}} </option>
+        {% endfor %}
+{% endif %}

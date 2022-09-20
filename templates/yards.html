@@ -1,0 +1,95 @@
+{% include 'include/header.html' %}
+{% include 'include/topbar.html' %}
+ {% include 'include/sidebar.html' %}
+ <!-- Content Wrapper. Contains page content -->
+ <div class="content-wrapper">
+     <!-- Content Header (Page header) -->
+     <section class="content-header">
+         <div class="container-fluid">
+
+             <div class="row mb-2">
+                 <div class="col-sm-6">
+                     <h1> All Yard </h1>
+                 </div>
+                 <div class="col-sm-6">
+                     <ol class="breadcrumb float-sm-right">
+                         <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                         <li class="breadcrumb-item active">All Yard</li>
+                     </ol>
+                 </div>
+             </div>
+         </div><!-- /.container-fluid -->
+     </section>
+
+     <!-- Main content -->
+     <section class="content">
+         
+         <!-- Default box -->
+         <div class="card">
+             
+             <div class="card-header">
+                     <h3 class="card-title">All Yard</h3>
+                     <div class="card-tools">
+                        <a  class="btn btn-primary" href="/add_yard/?s={{supp.id}}"><i class="fas fa-plus"></i>  Add Yard</a>
+                     </div>
+             </div>
+             <div class="card-body">
+                 <p><b>Supplier Name : #{{supp.id}} {{supp.name}}</b></p>
+<div id="msg"></div>
+                     <table id="example1" class="table table-bordered table-striped">
+                         <thead>
+                             <tr>
+                                                 <th>#No.</th>
+                                                 <th> Name</th>
+                                                 <th>Address</th>
+                                                 <th>Edit </th>
+                                                 <th>Delete</th>
+
+                                             </tr>
+                         </thead>
+                         <tbody>
+                             {% for i in yardss %}
+                                <tr>
+                   <td>#{{forloop.counter}}</td>
+                   <td>{{i.name}}</td>
+                   <td>{{i.address}}</td>
+                   <td><a class="btn btn-primary btn-sm" href="/add_yard/?u={{i.id}}">Edit</a></td>
+                   <td><a class="btn btn-danger btn-sm text-white" onclick="deletecategory({{i.id}})">Delete</a></td>
+                   </tr>
+                   {% endfor %}
+                             </tbody>
+                     </table>
+
+
+             </div>
+             <!-- /.card-body -->
+         </div>
+         <!-- /.card -->
+
+     </section>
+     <!-- /.content -->
+ </div>
+ <!-- /.content-wrapper -->
+  
+ <script>
+ function deletecategory(id){
+     var result = confirm("Are you sure. you want to delete?");
+     if (result) {
+         $.ajax({
+             type: 'GET',
+             url: '/delete_yard/',
+             data: {'u':id},
+             success: function(data) {
+                if(data.status == '1'){
+                    toastr.success('Category Delete Success.')
+                    document.ready(window.setTimeout(window.location.reload(),8000));
+                 }
+                 if(data.status == '0'){
+                    toastr.error('Something Wrong.')
+                 }
+             }
+         })
+     }
+ }
+ </script>
+ {% include 'include/footer.html' %}

@@ -1,0 +1,162 @@
+  {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Update Actual</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Update Actual</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Update Actual</h3>
+                <div class="card-tools">
+                    <a href="/actuals/" class="btn btn-sm btn-primary"><i class="fas fa-long-arrow-alt-left" aria-hidden="true"></i>  Go Back </a>
+                </div>
+        </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                         <form id="updatequality-form">
+                            {% csrf_token %}
+
+                            <div class="form-row">
+                                <input type="hidden" name="actualid" id="actualid" value="{{qua.id}}" class="form-control" required>
+                                <div class="form-group col-md-4">
+                                    <label for="supplier" class=""> Supplier  <span class="text-danger">*</span></label>
+                                    <select type="text" name="supplier" id="supplier" onchange="UpdateSupplierid(this)" class="form-control" required>
+                                        <option value=""> Select Supplier </option>
+                                        {% for i in supp %}
+                                        <option value="{{i.id}}" {% if qua.supplier.id == i.id %}selected{% endif %}> {{i.name}} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="Yard" class=""> Yard  <span class="text-danger">*</span></label>
+                                    <select type="text" name="Yard" id="Yard" onChange="actualfatchid(this)" class="form-control" required>
+                                    
+                                    </select>
+                                </div>
+                                
+                                
+                                <div class="form-group col-md-4">
+                                    <label for="duty" class="">Duty  <span class="text-danger">*</span></label>
+                                    <input type="text" name="duty" id="duty" value="{{qua.duty}}" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group col-md-4">
+                                    <label for="po_number" class="">po_number <span class="text-danger">*</span></label>
+                                    <input type="text" name="po_number" id="po_number" value="{{qua.po_number}}" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group col-md-4">
+                                    <label for="typeoid" class="">Type  <span class="text-danger">*</span></label>
+                                    <input type="text" name="typeoid" id="typeoid" value="{{qua.typeo}}" class="form-control" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="recovery" class="">Recovery  <span class="text-danger">*</span></label>
+                                    <input type="text" name="recovery" id="recovery" value="{{qua.recovery}}" class="form-control" readonly>
+                                </div>
+                                
+                            </div>
+                            <div class="form-row" id="newrowappend">
+                            </div>
+
+                            <button type="button" class="btn btn-primary" onclick="updateactual()">Update</button>
+
+                        </form>
+                       
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper  -->
+
+<script>
+function updateactual(){
+    var formData = $("#updatequality-form").serialize();
+    $.ajax({
+        type: 'POST',
+        url: '/add_actual/?u={{qua.id}}',
+        data: formData,
+        success: function(data) {
+            if(data.status == '1'){
+                toastr.success('Quality Update Success.')
+                document.ready(window.setTimeout(location.href="/actuals/",5000));
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+            }
+        }
+    })
+}
+
+
+
+function UpdateSupplierid(){
+    var qua = document.getElementById("actualid").value;
+    var x = document.getElementById("supplier").value;
+    c = {'x':x,'qua':qua}
+    $.ajax({
+        type: 'GET',
+        url: '/ajax/fatch_yard_quality_ajax/',
+        data: c,
+        success: function(data) {
+            $("#Yard").html(data);
+        }
+    })
+}
+
+function actualfatchid(){
+    var s = document.getElementById("supplier").value;
+    var y = document.getElementById("Yard").value;
+    c = {'supplierid':s,'Yardid':y}
+    $.ajax({
+        type: 'GET',
+        async : false,
+        url: '/ajax/fatch_quality_ajax/',
+        data: c,
+        success: function(data) {
+            $("#newrowappend").html(data);
+        }
+    })
+}
+
+const windowOnload = window.onload = () => {
+    UpdateSupplierid();
+    actualfatchid();
+};
+
+windowOnload();
+
+
+</script>
+
+{% include 'include/footer.html' %}

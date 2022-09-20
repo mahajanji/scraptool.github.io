@@ -1,0 +1,182 @@
+  {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Create Quality</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Create Quality</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Create Quality</h3>
+                <div class="card-tools">
+                    <a href="/qualitys/" class="btn btn-sm btn-primary"><i class="fas fa-long-arrow-alt-left" aria-hidden="true"></i>  Go Back </a>
+                </div>
+        </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <form id="adduser-form">
+                            {% csrf_token %}
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="supplier" class=""> Supplier <span class="text-danger">*</span></label>
+                                    <select type="text" name="supplier" id="supplier" onChange="Supplierid(this)" class="form-control" required>
+                                        <option value=""> Select Supplier </option>
+                                        {% for i in supp %}
+                                        <option value="{{i.id}}"> {{i.name}} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="Yard" class=""> Yard <span class="text-danger">*</span></label>
+                                    <select type="text" name="Yard" id="Yardid"  class="form-control" required>
+                                    
+                                    </select>
+                                </div>
+                                
+
+                                <div class="form-group col-md-4">
+                                    <label for="grade" class="">Grade <span class="text-danger">*</span></label>
+                                    <select type="text" name="grade" id="grade" onChange="Gradeid(this)" class="form-control" required>
+                                        <option value=""> Select Category </option>
+                                        {% for i in grades %}
+                                        <option value="{{i.id}}"> {{i.name}} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group col-md-4">
+                                    <label for="duty" class="">Duty <span class="text-danger">*</span></label>
+                                    <input type="number" name="duty" id="duty" value="0" class="form-control" required>
+                                </div>
+                                
+                                
+                               
+                            </div>
+                            <div class="form-row" id="newrowappend">
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary" onclick="addquality()">Create Quality</button>
+
+                        </form>
+                        
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper  -->
+
+<script>
+function updatequality(){
+    var formData = $("#updatequality-form").serialize();
+    $.ajax({
+        type: 'POST',
+        url: '/add_quality/?u={{qua.id}}',
+        data: formData,
+        success: function(data) {
+            if(data.status == '1'){
+                toastr.success('Quality Update Success.')
+                document.ready(window.setTimeout(location.href="/qualitys/",5000));
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+            }
+        }
+    })
+}
+
+function addquality(){
+    var formData = $("#adduser-form").serialize();
+    var supplier = document.getElementById('supplier').value;
+    var Yardid = document.getElementById('Yardid').value;
+    var grade = document.getElementById('grade').value;
+    var duty = document.getElementById('duty').value;
+    if(supplier == '' || Yardid == '' || grade == '' || duty == ''){
+        toastr.error('All Filed Are Required')
+    }else{
+        $.ajax({
+            type: 'POST',
+            url: '/add_quality/',
+            data: formData,
+            success: function(data) {
+                if(data.status == '1'){
+                    $('#adduser-form')[0].reset();
+                    toastr.success('Quality Create Success.')
+                    document.ready(window.setTimeout(location.href="/qualitys/",5000));
+                }
+                if(data.status == '0'){
+                    toastr.error('Something Wrong.')
+                }
+                if(data.status == '2'){
+                    toastr.error('Wrong weightage calculate')
+                }
+                if(data.status == '3'){
+                    toastr.error('Same Supplier And Yard Already Selected')
+                }
+            }
+        })
+    }
+}
+
+function Supplierid(){
+    var x = document.getElementById("supplier").value;
+    c = {'x':x}
+    $.ajax({
+        type: 'GET',
+        url: '/ajax/fatch_Supplier/',
+        data: c,
+        success: function(data) {
+            $("#Yardid").html(data);
+        }
+    })
+}
+
+
+function Gradeid(){
+    var x = document.getElementById("grade").value;
+    c = {'x':x}
+    $.ajax({
+        type: 'GET',
+        url: '/ajax/fatch_grade/',
+        data: c,
+        success: function(data) {
+            $("#newrowappend").html(data);
+        }
+    })
+}
+
+
+</script>
+
+{% include 'include/footer.html' %}

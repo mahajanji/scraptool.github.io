@@ -1,0 +1,27 @@
+{% if quality %}
+    {% for q in quality %}
+          
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td>{{q.supplier.name}}</td>
+                  <td>{{q.yard.name}}</td>
+                  <td>{{q.alc}}</td>
+                  <td class="hidecol"><input type="text" name="recovery" id="recovery{{forloop.counter}}" value="{{q.recovery}}" class="form-control"></td>
+                  <td class="hidecol"><input type="text" name="duty" id="duty{{forloop.counter}}" value="{{q.duty}}" class="form-control"></td>
+                  
+                  <td class="hidecol"><input type="text" name="weghtagofalum" id="weghtagofalum{{forloop.counter}}" value="{{q.weightage_al}}" class="form-control"></td>
+                  <td class="hidecol"><input type="text" name="costwithaoutalum" id="costwithaoutalum{{forloop.counter}}" value="{{q.mc}}" class="form-control"></td>
+                  <td class="hidecol"><input type="text" name="overhead" id="overhead{{forloop.counter}}" value="{{q.ohc}}" class="form-control"></td>
+                  <td class="hidecol"><input type="text" name="total_operation" id="total_operation{{forloop.counter}}" class="form-control"></td>
+                  <td class="hidecol"><input type="text" name="Alcostwithoutweightage" id="Alcostwithoutweightage{{forloop.counter}}" class="form-control"></td>
+                  <td class="hidecol"><input type="text" name="duty_cost" id="duty_cost{{forloop.counter}}" class="form-control"></td>
+                  
+                  <td id="Alcost{{forloop.counter}}"></td>
+                  <td id="finalalcost{{forloop.counter}}"></td>
+                  <td><input type="button" class="Supplierrateid" value="click" id="Supplierrateid" onclick="Supplierrate({{forloop.counter}})"></td>
+                </tr>
+
+    {% endfor %}
+{% endif %}
+
+

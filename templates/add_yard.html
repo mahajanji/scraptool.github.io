@@ -1,0 +1,157 @@
+  {% include 'include/header.html' %}
+   {% include 'include/topbar.html' %}
+    {% include 'include/sidebar.html' %}
+<!-- Content Wrapper. Contains page content -->
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Create Yard</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                        
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {% if yard %}
+                        <form id="updateuser-form">
+                            {% csrf_token %}
+
+                        <div class="form-row">
+                            
+                                <div class="form-group col-md-4">
+                                    <label for="supplier" class=""> Supplier <span class="text-danger">*</span></label>
+                                    <select type="text" name="supplier" id="supplier" class="form-control" required>
+                                        <option value="" desable> Select Supplier </option>
+                                        {% for i in suppliers %}
+                                        <option value="{{i.id}}" {% if i.id == yard.supplier.id %} selected {% endif %}>  {{i.name}} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="name" class=""> Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" id="name" class="form-control" value="{{yard.name}}" required>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="address" class="">Address <span class="text-danger">*</span></label>
+                                    <input type="text" name="address" id="address" class="form-control" value="{{yard.address}}" required>
+                                </div>
+                        
+                        </div>
+                        
+                            
+
+                            <button type="button" class="btn btn-primary" id="updateuserid" onclick="updateuser()">Update Yard</button>
+                            <p id="msg" class="pl-5" style="font-size:20px;"></p>
+                        </form>
+                        {% else %}
+                        <form id="adduser-form">
+                            {% csrf_token %}
+
+                            <div class="form-row">
+                                
+                                <div class="form-group col-md-4">
+                                    <label for="supplier" class=""> Supplier <span class="text-danger">*</span></label>
+                                    <select type="text" name="supplier" id="supplier" class="form-control" required>
+                                        <option value="" desable> Select Supplier </option>
+                                        {% for i in suppliers %}
+                                        <option value="{{i.id}}"> {{i.name}} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="name" class=""> Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" id="name" class="form-control" required>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="address" class="">Address <span class="text-danger">*</span></label>
+                                    <input type="text" name="address" id="address" class="form-control" required>
+                                </div>
+                                
+                            </div>
+                                <button type="button" class="btn btn-primary btn-sm" id="adduserid" onclick="adduser()">  Create Yard</button>
+                                <p id="msg" class="pl-5" style="font-size:20px;"></p>
+                            
+                        </form>
+                        {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+
+            </div>
+            
+            <!-- /.card-body -->
+        
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+ <script>
+function updateuser(){
+    var formData = $("#updateuser-form").serialize();
+    $.ajax({
+        type: 'POST',
+        url: '/add_yard/?u={{yard.id}}',
+        data: formData,
+        success: function(data) {
+            if(data.status == '1'){
+                toastr.success('Yard Update Success.')
+            }
+            if(data.status == '0'){
+                toastr.error('Something Wrong.')
+            }
+        }
+    })
+}
+function adduser(){
+    var formData = $("#adduser-form").serialize();
+    var supplier = document.getElementById('supplier').value;
+    var name = document.getElementById('name').value;
+    var address = document.getElementById('address').value;
+    if(name == '' || supplier == '' || address == ''){
+        toastr.error('All Filed Required.')
+    }else{
+        $.ajax({
+            type: 'POST',
+            url: '/add_yard/',
+            data: formData,
+            success: function(data) {
+                if(data.status == '1'){
+                    $('#adduser-form')[0].reset();
+                    toastr.success('Yard Create Success.')
+                }
+                if(data.status == '0'){
+                    toastr.error('Something Wrong.')
+                }
+            }
+        })
+    }
+}
+
+</script>
+{% include 'include/footer.html' %} 

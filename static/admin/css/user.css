@@ -1,0 +1,33 @@
+.offer_login_button {
+    min-width: 135px;
+}
+
+.offerdetail_parameters {
+    width: 120px;
+}
+
+
+/* .sidebar,
+.main-sidebar {
+    width: 200px;
+}
+
+@media (min-width: 768px) {
+    body:not(.sidebar-mini-md) .content-wrapper,
+    body:not(.sidebar-mini-md) .main-footer,
+    body:not(.sidebar-mini-md) .main-header {
+        margin-left: 200px;
+    }
+} */
+
+.offer-detail-block img {
+    width: 100px;
+}
+
+.offer_textarea_link {
+    width: 100%;
+    height: 50px;
+    font-size: 14px;
+    border: 1px solid #dddddd;
+    padding: 5px;
+}
